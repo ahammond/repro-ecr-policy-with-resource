@@ -69,7 +69,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "node .projenrc.js"
+          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
         }
       ]
     },
@@ -119,7 +119,7 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools .projenrc.js"
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools projenrc .projenrc.ts"
         }
       ]
     },
@@ -192,7 +192,7 @@
       },
       "steps": [
         {
-          "exec": "yarn upgrade npm-check-updates"
+          "exec": "pnpm update npm-check-updates"
         },
         {
           "exec": "npm-check-updates --dep dev --upgrade --target=minor"
@@ -210,10 +210,10 @@
           "exec": "npm-check-updates --dep bundle --upgrade --target=minor"
         },
         {
-          "exec": "yarn install --check-files"
+          "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "yarn upgrade"
+          "exec": "pnpm update"
         },
         {
           "exec": "npx projen"

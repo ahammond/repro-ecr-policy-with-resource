@@ -16,8 +16,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: "7"
       - name: Install dependencies
-        run: yarn install --check-files --frozen-lockfile
+        run: pnpm i --frozen-lockfile
       - name: Upgrade dependencies
         run: npx projen upgrade
       - name: Find mutations
@@ -36,14 +40,12 @@ jobs:
     needs: upgrade
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     if: ${{ needs.upgrade.outputs.patch_created }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        with: {}
       - name: Download patch
         uses: actions/download-artifact@v3
         with:
@@ -57,7 +59,7 @@ jobs:
           git config user.email "github-actions@github.com"
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           commit-message: |-
